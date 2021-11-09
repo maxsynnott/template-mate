@@ -1,0 +1,24 @@
+{
+	"name": "md-variables",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "rm -rf build & tsc"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/node": "^16.11.7",
+		"@types/yargs": "^17.0.5",
+		"typescript": "^4.4.4"
+	},
+	"dependencies": {
+		"yargs": "^17.2.1"
+	},
+	"bin": {
+		"md-variables": "./build/cli.js"
+	}
+}
