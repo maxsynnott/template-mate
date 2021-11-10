@@ -1,0 +1,5 @@
+{
+	"color": "red",
+	"age": 40,
+	"link": { "text": "Google", "url": "https://www.google.com" }
+}
