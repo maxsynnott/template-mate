@@ -5,12 +5,12 @@ import { readFile } from './helpers/readFile'
 
 type RecursiveObject<T> = { [key: string]: T | RecursiveObject<T> }
 
-type Variables = RecursiveObject<string | string[]> & {
-	templates?: Record<string, string>
-}
+type Variables = RecursiveObject<string | string[]>
+type Templates = Record<string, string>
 
 interface CreateFileOptions {
 	variables: Variables
+	templates: Templates
 	templateFile: string
 	outFile: string
 }
@@ -18,10 +18,12 @@ interface CreateFileOptions {
 interface RenderOptions {
 	templateContent: string
 	variables: Variables
+	templates: Templates
 }
 
 export const renderFile = ({
 	variables,
+	templates,
 	templateFile,
 	outFile,
 }: CreateFileOptions) => {
@@ -29,6 +31,7 @@ export const renderFile = ({
 	const outFileContent = renderContent({
 		templateContent,
 		variables,
+		templates,
 	})
 	fs.writeFileSync(outFile, outFileContent)
 }
@@ -36,23 +39,33 @@ export const renderFile = ({
 export const renderContent = ({
 	templateContent,
 	variables,
+	templates,
 }: RenderOptions): string => {
 	const mappedVariables = deepMapObject(variables, (value) =>
 		Array.isArray(value) ? value.join('\n') : value,
 	)
 
-	return replaceTemplateMateObjects(templateContent, mappedVariables)
+	return replaceTemplateMateObjects(
+		templateContent,
+		mappedVariables,
+		templates,
+	)
 }
 
 const replaceTemplateMateObjects = (
 	templateContent: string,
 	variables: Variables,
+	templates: Templates,
 ): string => {
 	const regex = /<!--\s*template-mate:\s*({.*}\s*)-->/g
 	return templateContent.replace(regex, (match, capture) => {
 		const templateMateObject = JSON.parse(capture)
 		return (
-			getTemplateMateObjectValue(templateMateObject, variables) ?? match
+			getTemplateMateObjectValue(
+				templateMateObject,
+				variables,
+				templates,
+			) ?? match
 		)
 	})
 }
@@ -60,6 +73,7 @@ const replaceTemplateMateObjects = (
 const getTemplateMateObjectValue = (
 	templateMateObject: Record<string, string>,
 	variables: Variables,
+	templates: Templates,
 ): string | null => {
 	const { type, name, variablesPath, template } = templateMateObject
 
@@ -69,12 +83,13 @@ const getTemplateMateObjectValue = (
 
 	if (type === 'template') {
 		const templateVariables = variables?.[variablesPath]
-		const filePath = variables?.templates?.[template]
+		const filePath = templates[template]
 		if (templateVariables && filePath) {
 			const templateContent = readFile(filePath)
 			return renderContent({
 				templateContent,
 				variables: templateVariables as Variables,
+				templates,
 			})
 		}
 	}
