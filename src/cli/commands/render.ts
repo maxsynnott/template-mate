@@ -14,11 +14,11 @@ export const builder: CommandBuilder<Options, Options> = (yargs) => {
 			type: 'string',
 			default: 'template-mate.json',
 		},
-		preFile: {
+		templateFile: {
 			type: 'string',
 			demandOption: true,
 		},
-		postFile: {
+		outFile: {
 			type: 'string',
 			demandOption: true,
 		},

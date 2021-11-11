@@ -1,15 +1,21 @@
 {
 	"name": "template-mate",
-	"version": "1.0.0",
-	"description": "",
+	"version": "1.0.1",
+	"description": "A simple tool to help you create and render templates",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "rm -rf dist/* & tsc"
 	},
-	"keywords": [],
-	"author": "",
+	"keywords": [
+		"template",
+		"file",
+		"variables"
+	],
+	"author": {
+		"name": "Max Ryan Synnott",
+		"url": "https://github.com/maxsynnott/template-mate"
+	},
 	"license": "ISC",
 	"devDependencies": {
 		"@types/node": "^16.11.7",
@@ -23,5 +29,9 @@
 	},
 	"bin": {
 		"template-mate": "./dist/cli/cli.js"
+	},
+	"repository": "https://github.com/maxsynnott/template-mate",
+	"bugs": {
+		"url": "https://github.com/maxsynnott/template-mate/issues"
 	}
 }

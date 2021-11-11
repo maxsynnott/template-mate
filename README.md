@@ -31,5 +31,5 @@ const variables = {
 	foo: 'bar',
 }
 
-renderFile(templateFile: 'README.template.md', outFilr: 'README.md', variables)
+renderFile(templateFile: 'README.template.md', outFile: 'README.md', variables)
 ```
