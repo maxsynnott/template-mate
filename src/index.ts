@@ -57,7 +57,7 @@ const replaceTemplateMateObjects = (
 	variables: Variables,
 	templates: Templates,
 ): string => {
-	const regex = /<!--\s*template-mate:\s*({.*}\s*)-->/g
+	const regex = /<!--\s*template-mate:\s*({[^}]*}\s*)-->/g
 	return templateContent.replace(regex, (match, capture) => {
 		const templateMateObject = JSON.parse(capture)
 		return (
