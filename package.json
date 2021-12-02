@@ -26,9 +26,6 @@
 	"dependencies": {
 		"yargs": "^17.2.1"
 	},
-	"bin": {
-		"template-mate": "./dist/cli/cli.js"
-	},
 	"repository": "https://github.com/maxsynnott/template-mate",
 	"bugs": {
 		"url": "https://github.com/maxsynnott/template-mate/issues"
