@@ -8,30 +8,38 @@ type RecursiveObject<T> = { [key: string]: T | RecursiveObject<T> }
 type Variables = RecursiveObject<string | string[]>
 type Templates = Record<string, string>
 
-interface CreateFileOptions {
+interface RenderFileOptions {
 	variables: Variables
 	templates: Templates
 	templateFile: string
 	outFile: string
+	prefix?: string
+	suffix?: string
 }
 
-interface RenderOptions {
+interface RenderContentOptions {
 	templateContent: string
 	variables: Variables
 	templates: Templates
+	prefix?: string
+	suffix?: string
 }
 
 export const renderFile = ({
 	variables,
-	templates,
+	templates = {},
 	templateFile,
 	outFile,
-}: CreateFileOptions) => {
+	prefix = '',
+	suffix = '',
+}: RenderFileOptions) => {
 	const templateContent = readFile(templateFile)
 	const outFileContent = renderContent({
 		templateContent,
 		variables,
 		templates,
+		prefix,
+		suffix,
 	})
 	fs.writeFileSync(outFile, outFileContent)
 }
@@ -39,17 +47,21 @@ export const renderFile = ({
 export const renderContent = ({
 	templateContent,
 	variables,
-	templates,
-}: RenderOptions): string => {
+	templates = {},
+	prefix = '',
+	suffix = '',
+}: RenderContentOptions): string => {
 	const mappedVariables = deepMapObject(variables, (value) =>
 		Array.isArray(value) ? value.join('\n') : value,
 	)
 
-	return replaceTemplateMateObjects(
+	const replacedContent = replaceTemplateMateObjects(
 		templateContent,
 		mappedVariables,
 		templates,
 	)
+
+	return prefix + replacedContent + suffix
 }
 
 const replaceTemplateMateObjects = (
